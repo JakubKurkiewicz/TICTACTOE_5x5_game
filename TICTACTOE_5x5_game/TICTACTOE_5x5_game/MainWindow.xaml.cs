@@ -173,6 +173,7 @@ namespace TICTACTOE_5x5_game
             if (i == 25)
             {
                 koniecGry = true;
+                Winner.Content = "REMIS";
             }
             if (koniecGry == true)
             {
