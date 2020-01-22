@@ -23,12 +23,12 @@ namespace TICTACTOE_5x5_game
     public partial class MainWindow : Window
     {
 
+        public bool koniecGry;
 
-       //private bool koniecGry;
         private bool ruchGraczaA;
-        private bool GameEnd;
 
         private bool stop_act;
+
         DispatcherTimer dt = new DispatcherTimer();
 
         public Button[,] plansza;
@@ -41,20 +41,46 @@ namespace TICTACTOE_5x5_game
 
         private Gracz p2;
 
+        private int i;
+
+        public string imieWin;
+
+        public int player1count;
+
+        public int player2count;
+
         public MainWindow()
         {
             InitializeComponent();
-            playground();
-
-
-            stop_act = false;
-            //NewGame();
-
+            NewGame();
         }
-        
 
-       
 
+
+        private void NewGame()
+        {
+            licz();
+            koniecGry = false;
+            playground();
+            stop_act = false;
+            ruchGraczaA = true;
+            Player1Textbox.MaxLength = 17;
+            Player2Textbox.MaxLength = 17;
+            i = 0;
+            for (var c = 1; c < 6; c++)
+            {
+                for (var d = 1; d < 6; d++)
+                {
+                    var nazwa = ("bt" + c + "_" + d);
+                    Trace.WriteLine(nazwa);
+                    var buttonik = (Button)this.FindName(nazwa);
+                    buttonik.Content = "";
+                    
+                    var tak = (c - 1) + "." + (d - 1);
+                    buttonik.Tag = tak;
+                }
+            }
+        }
 
         private void playground()
         {
@@ -75,40 +101,24 @@ namespace TICTACTOE_5x5_game
                                                  { 5, 5, 5, 5, 5 },
                                                                         };
 
-          
-            ruchGraczaA = true;
-
-            Player1Textbox.MaxLength = 20;
-            Player2Textbox.MaxLength = 20;
-
         }
 
 
-       
-        
-
-        private int i=0;
-        
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (stop_act == false)
             {
                 Start(sender, e);
+                Winner_text.Content = "";
+                Winner.Content = "";
             }
             if (i == 0) {
                 stop_act = true;
             }
-            /*
-            if (GameEnd)
-            {
-               // NewGame();
-                return;
-            }
-            */
+            
+
             i++;
             Button clickedButton = (Button)sender;
-
-
 
             if (ruchGraczaA)
             {
@@ -124,21 +134,14 @@ namespace TICTACTOE_5x5_game
                     clickedButton.Content = "X";
                    
                     int b = Int32.Parse(s[0]);
+
                     int c = Int32.Parse(s[1]);
 
-                    Trace.WriteLine(b + "----------" + c);
-                    Trace.WriteLine(array_game[b, c] + "----------wartosc");
-                   
                     array_game[b, c] = 1;
-                    Trace.WriteLine(array_game[b, c] + "-------po---wartosc");
-                    Trace.WriteLine(b + "--------po--" + c);
-                    
-                   
-              
+
                     clickedButton.Tag = false;
                  
                     ruchGraczaA = false;
-
                 }
             }
             else {
@@ -148,34 +151,35 @@ namespace TICTACTOE_5x5_game
                 }
                 else
                 {
-                   
                     string[] s = clickedButton.Tag.ToString().Split('.');
     
                     int b = Int32.Parse(s[0]);
+
                     int c = Int32.Parse(s[1]);
 
-                
                     clickedButton.Content = "O";
-                //    Trace.WriteLine(b + "----------" + c);
-                 //   Trace.WriteLine(array_game[b, c] + "----------wartosc");
-                    array_game[b, c] = 2;
-                 //   Trace.WriteLine(array_game[b, c] + "------po----wartosc");
-                  //  Trace.WriteLine(b + "--------po--" + c);
-                   
-                    clickedButton.Tag = true;
-                    ruchGraczaA = true;
-                    
 
+                    array_game[b, c] = 2;
+
+                    clickedButton.Tag = true;
+
+                    ruchGraczaA = true;
                 }
                 
             }
 
-
-            if (i == 25) {
-                Trace.WriteLine("REMIS");
-            }
             Sprawdz();
-            //Start_stoper(sender, e);
+
+            if (i == 25)
+            {
+                koniecGry = true;
+            }
+            if (koniecGry == true)
+            {
+                Winner_text.Content = "Wygrał: ";
+                Stop(sender, e);
+                NewGame();
+            }
         }
 
 
@@ -188,186 +192,146 @@ namespace TICTACTOE_5x5_game
             //Wiersz 0
             if ((array_game[0, 0] == 1) & (array_game[0, 1] == 1) & (array_game[0, 2] == 1) & (array_game[0, 3] == 1))
             {
-                GameEnd = true;
-                bt1_1.Background = Brushes.Red;
-                bt1_2.Background = Brushes.Red;
-                bt1_3.Background = Brushes.Red;
-                bt1_4.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[0, 0] == 2) & (array_game[0, 1] == 2) & (array_game[0, 2] == 2) & (array_game[0, 3] == 2))
             {
-                GameEnd = true;
-                bt1_1.Background = Brushes.Blue;
-                bt1_2.Background = Brushes.Blue;
-                bt1_3.Background = Brushes.Blue;
-                bt1_4.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             //Wiersz 0
             if ((array_game[0, 1] == 1) & (array_game[0, 2] == 1) & (array_game[0, 3] == 1) & (array_game[0, 4] == 1))
             {
-                GameEnd = true;
-                bt1_2.Background = Brushes.Red;
-                bt1_3.Background = Brushes.Red;
-                bt1_4.Background = Brushes.Red;
-                bt1_5.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[0, 1] == 2) & (array_game[0, 2] == 2) & (array_game[0, 3] == 2) & (array_game[0, 4] == 2))
             {
-                GameEnd = true;
-                bt1_2.Background = Brushes.Blue;
-                bt1_3.Background = Brushes.Blue;
-                bt1_4.Background = Brushes.Blue;
-                bt1_5.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
 
             //Wiersz 1
             if ((array_game[1, 0] == 1) & (array_game[1, 1] == 1) & (array_game[1, 2] == 1) & (array_game[1, 3] == 1))
             {
-                GameEnd = true;
-                bt2_1.Background = Brushes.Red;
-                bt2_2.Background = Brushes.Red;
-                bt2_3.Background = Brushes.Red;
-                bt2_4.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[1, 0] == 2) & (array_game[1, 1] == 2) & (array_game[1, 2] == 2) & (array_game[1, 3] == 2))
             {
-                GameEnd = true;
-                bt2_1.Background = Brushes.Blue;
-                bt2_2.Background = Brushes.Blue;
-                bt2_3.Background = Brushes.Blue;
-                bt2_4.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             //Wiersz 1
             if ((array_game[1, 1] == 1) & (array_game[1, 2] == 1) & (array_game[1, 3] == 1) & (array_game[1, 4] == 1))
             {
-                GameEnd = true;
-                bt2_2.Background = Brushes.Red;
-                bt2_3.Background = Brushes.Red;
-                bt2_4.Background = Brushes.Red;
-                bt2_5.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[1, 1] == 2) & (array_game[1, 2] == 2) & (array_game[1, 3] == 2) & (array_game[1, 4] == 2))
             {
-                GameEnd = true;
-                bt2_2.Background = Brushes.Blue;
-                bt2_3.Background = Brushes.Blue;
-                bt2_4.Background = Brushes.Blue;
-                bt2_5.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
 
             //Wiersz 2
             if ((array_game[2, 0] == 1) & (array_game[2, 1] == 1) & (array_game[2, 2] == 1) & (array_game[2, 3] == 1))
             {
-                GameEnd = true;
-                bt3_1.Background = Brushes.Red;
-                bt3_2.Background = Brushes.Red;
-                bt3_3.Background = Brushes.Red;
-                bt3_4.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[2, 0] == 2) & (array_game[2, 1] == 2) & (array_game[2, 2] == 2) & (array_game[2, 3] == 2))
             {
-                GameEnd = true;
-                bt3_1.Background = Brushes.Blue;
-                bt3_2.Background = Brushes.Blue;
-                bt3_3.Background = Brushes.Blue;
-                bt3_4.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             //Wiersz 2
             if ((array_game[2, 1] == 1) & (array_game[2, 2] == 1) & (array_game[2, 3] == 1) & (array_game[2, 4] == 1))
             {
-                GameEnd = true;
-                bt3_2.Background = Brushes.Red;
-                bt3_3.Background = Brushes.Red;
-                bt3_4.Background = Brushes.Red;
-                bt3_5.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[2, 1] == 2) & (array_game[2, 2] == 2) & (array_game[2, 3] == 2) & (array_game[2, 4] == 2))
             {
-                GameEnd = true;
-                bt3_2.Background = Brushes.Blue;
-                bt3_3.Background = Brushes.Blue;
-                bt3_4.Background = Brushes.Blue;
-                bt3_5.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
 
             //Wiersz 3
             if ((array_game[3, 0] == 1) & (array_game[3, 1] == 1) & (array_game[3, 2] == 1) & (array_game[3, 3] == 1))
             {
-                GameEnd = true;
-                bt4_1.Background = Brushes.Red;
-                bt4_2.Background = Brushes.Red;
-                bt4_3.Background = Brushes.Red;
-                bt4_4.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[3, 0] == 2) & (array_game[3, 1] == 2) & (array_game[3, 2] == 2) & (array_game[3, 3] == 2))
             {
-                GameEnd = true;
-                bt4_1.Background = Brushes.Blue;
-                bt4_2.Background = Brushes.Blue;
-                bt4_3.Background = Brushes.Blue;
-                bt4_4.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             //Wiersz 3
             if ((array_game[3, 1] == 1) & (array_game[3, 2] == 1) & (array_game[3, 3] == 1) & (array_game[3, 4] == 1))
             {
-                GameEnd = true;
-                bt4_2.Background = Brushes.Red;
-                bt4_3.Background = Brushes.Red;
-                bt4_4.Background = Brushes.Red;
-                bt4_5.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[3, 1] == 2) & (array_game[3, 2] == 2) & (array_game[3, 3] == 2) & (array_game[3, 4] == 2))
             {
-                GameEnd = true;
-                bt4_2.Background = Brushes.Blue;
-                bt4_3.Background = Brushes.Blue;
-                bt4_4.Background = Brushes.Blue;
-                bt4_5.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
 
             //Wiersz 4
             if ((array_game[4, 0] == 1) & (array_game[4, 1] == 1) & (array_game[4, 2] == 1) & (array_game[4, 3] == 1))
             {
-                GameEnd = true;
-                bt5_1.Background = Brushes.Red;
-                bt5_2.Background = Brushes.Red;
-                bt5_3.Background = Brushes.Red;
-                bt5_4.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[4, 0] == 2) & (array_game[4, 1] == 2) & (array_game[4, 2] == 2) & (array_game[4, 3] == 2))
             {
-                GameEnd = true;
-                bt5_1.Background = Brushes.Blue;
-                bt5_2.Background = Brushes.Blue;
-                bt5_3.Background = Brushes.Blue;
-                bt5_4.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             //Wiersz 4
             if ((array_game[4, 1] == 1) & (array_game[4, 2] == 1) & (array_game[4, 3] == 1) & (array_game[4, 4] == 1))
             {
-                GameEnd = true;
-                bt5_2.Background = Brushes.Red;
-                bt5_3.Background = Brushes.Red;
-                bt5_4.Background = Brushes.Red;
-                bt5_5.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[4, 1] == 2) & (array_game[4, 2] == 2) & (array_game[4, 3] == 2) & (array_game[4, 4] == 2))
             {
-                GameEnd = true;
-                bt5_2.Background = Brushes.Blue;
-                bt5_3.Background = Brushes.Blue;
-                bt5_4.Background = Brushes.Blue;
-                bt5_5.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             #endregion
 
@@ -377,181 +341,141 @@ namespace TICTACTOE_5x5_game
             //Kolumna 0
             if ((array_game[0, 0] == 1) & (array_game[1, 0] == 1) & (array_game[2, 0] == 1) & (array_game[3, 0] == 1))
             {
-                GameEnd = true;
-                bt1_1.Background = Brushes.Red;
-                bt2_1.Background = Brushes.Red;
-                bt3_1.Background = Brushes.Red;
-                bt4_1.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[0, 0] == 2) & (array_game[1, 0] == 2) & (array_game[2, 0] == 2) & (array_game[3, 0] == 2))
             {
-                GameEnd = true;
-                bt1_1.Background = Brushes.Blue;
-                bt2_1.Background = Brushes.Blue;
-                bt3_1.Background = Brushes.Blue;
-                bt4_1.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             //Kolumna 0
             if ((array_game[1, 0] == 1) & (array_game[2, 0] == 1) & (array_game[3, 0] == 1) & (array_game[4, 0] == 1))
             {
-                GameEnd = true;
-                bt2_1.Background = Brushes.Red;
-                bt3_1.Background = Brushes.Red;
-                bt4_1.Background = Brushes.Red;
-                bt5_1.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
             if ((array_game[1, 0] == 2) & (array_game[2, 0] == 2) & (array_game[3, 0] == 2) & (array_game[4, 0] == 2))
             {
-                GameEnd = true;
-                bt2_1.Background = Brushes.Blue;
-                bt3_1.Background = Brushes.Blue;
-                bt4_1.Background = Brushes.Blue;
-                bt5_1.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
 
             //Kolumna 1
             if ((array_game[0, 1] == 1) & (array_game[1, 1] == 1) & (array_game[2, 1] == 1) & (array_game[3, 1] == 1))
             {
-                GameEnd = true;
-                bt1_2.Background = Brushes.Red;
-                bt2_2.Background = Brushes.Red;
-                bt3_2.Background = Brushes.Red;
-                bt4_2.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[0, 1] == 2) & (array_game[1, 1] == 2) & (array_game[2, 1] == 2) & (array_game[3, 1] == 2))
             {
-                GameEnd = true;
-                bt1_2.Background = Brushes.Blue;
-                bt2_2.Background = Brushes.Blue;
-                bt3_2.Background = Brushes.Blue;
-                bt4_2.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             //Kolumna 1
             if ((array_game[1, 1] == 1) & (array_game[2, 1] == 1) & (array_game[3, 1] == 1) & (array_game[4, 1] == 1))
             {
-                GameEnd = true;
-                bt2_2.Background = Brushes.Red;
-                bt3_2.Background = Brushes.Red;
-                bt4_2.Background = Brushes.Red;
-                bt5_2.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
             if ((array_game[1, 1] == 2) & (array_game[2, 1] == 2) & (array_game[3, 1] == 2) & (array_game[4, 1] == 2))
             {
-                GameEnd = true;
-                bt2_2.Background = Brushes.Blue;
-                bt3_2.Background = Brushes.Blue;
-                bt4_2.Background = Brushes.Blue;
-                bt5_2.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
 
             //Kolumna 2
             if ((array_game[0, 2] == 1) & (array_game[1, 2] == 1) & (array_game[2, 2] == 1) & (array_game[3, 2] == 1))
             {
-                GameEnd = true;
-                bt1_3.Background = Brushes.Red;
-                bt2_3.Background = Brushes.Red;
-                bt3_3.Background = Brushes.Red;
-                bt4_3.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[0, 2] == 2) & (array_game[1, 2] == 2) & (array_game[2, 2] == 2) & (array_game[3, 2] == 2))
             {
-                GameEnd = true;
-                bt1_3.Background = Brushes.Blue;
-                bt2_3.Background = Brushes.Blue;
-                bt3_3.Background = Brushes.Blue;
-                bt4_3.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             //Kolumna 2
             if ((array_game[1, 2] == 1) & (array_game[2, 2] == 1) & (array_game[3, 2] == 1) & (array_game[4, 2] == 1))
             {
-                GameEnd = true;
-                bt2_3.Background = Brushes.Red;
-                bt3_3.Background = Brushes.Red;
-                bt4_3.Background = Brushes.Red;
-                bt5_3.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
             if ((array_game[1, 2] == 2) & (array_game[2, 2] == 2) & (array_game[3, 2] == 2) & (array_game[4, 2] == 2))
             {
-                GameEnd = true;
-                bt2_3.Background = Brushes.Blue;
-                bt3_3.Background = Brushes.Blue;
-                bt4_3.Background = Brushes.Blue;
-                bt5_3.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
 
             //Kolumna 3
             if ((array_game[0, 3] == 1) & (array_game[1, 3] == 1) & (array_game[2, 3] == 1) & (array_game[3, 3] == 1))
             {
-                GameEnd = true;
-                bt1_4.Background = Brushes.Red;
-                bt2_4.Background = Brushes.Red;
-                bt3_4.Background = Brushes.Red;
-                bt4_4.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[0, 3] == 2) & (array_game[1, 3] == 2) & (array_game[2, 3] == 2) & (array_game[3, 3] == 2))
             {
-                GameEnd = true;
-                bt1_4.Background = Brushes.Blue;
-                bt2_4.Background = Brushes.Blue;
-                bt3_4.Background = Brushes.Blue;
-                bt4_4.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             //Kolumna 3
             if ((array_game[1, 3] == 1) & (array_game[2, 3] == 1) & (array_game[3, 3] == 1) & (array_game[4, 3] == 1))
             {
-                GameEnd = true;
-                bt2_4.Background = Brushes.Red;
-                bt3_4.Background = Brushes.Red;
-                bt4_4.Background = Brushes.Red;
-                bt5_4.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
             if ((array_game[1, 3] == 2) & (array_game[2, 3] == 2) & (array_game[3, 3] == 2) & (array_game[4, 3] == 2))
             {
-                GameEnd = true;
-                bt2_4.Background = Brushes.Blue;
-                bt3_4.Background = Brushes.Blue;
-                bt4_4.Background = Brushes.Blue;
-                bt5_4.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
 
             //Kolumna 4
             if ((array_game[0, 4] == 1) & (array_game[1, 4] == 1) & (array_game[2, 4] == 1) & (array_game[3, 4] == 1))
             {
-                GameEnd = true;
-                bt1_5.Background = Brushes.Red;
-                bt2_5.Background = Brushes.Red;
-                bt3_5.Background = Brushes.Red;
-                bt4_5.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[0, 4] == 2) & (array_game[1, 4] == 2) & (array_game[2, 4] == 2) & (array_game[3, 4] == 2))
             {
-                GameEnd = true;
-                bt1_5.Background = Brushes.Blue;
-                bt2_5.Background = Brushes.Blue;
-                bt3_5.Background = Brushes.Blue;
-                bt4_5.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             //Kolumna 4
             if ((array_game[1, 4] == 1) & (array_game[2, 4] == 1) & (array_game[3, 4] == 1) & (array_game[4, 4] == 1))
             {
-                GameEnd = true;
-                bt2_5.Background = Brushes.Red;
-                bt3_5.Background = Brushes.Red;
-                bt4_5.Background = Brushes.Red;
-                bt5_5.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
             if ((array_game[1, 4] == 2) & (array_game[2, 4] == 2) & (array_game[3, 4] == 2) & (array_game[4, 4] == 2))
             {
-                GameEnd = true;
-                bt2_5.Background = Brushes.Blue;
-                bt3_5.Background = Brushes.Blue;
-                bt4_5.Background = Brushes.Blue;
-                bt5_5.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             #endregion
 
@@ -561,167 +485,126 @@ namespace TICTACTOE_5x5_game
             //Przekatna Lewa Gora - Prawy Dol
             if ((array_game[0, 0] == 1) & (array_game[1, 1] == 1) & (array_game[2, 2] == 1) & (array_game[3, 3] == 1))
             {
-                GameEnd = true;
-                bt1_1.Background = Brushes.Red;
-                bt2_2.Background = Brushes.Red;
-                bt3_3.Background = Brushes.Red;
-                bt4_4.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[0, 0] == 2) & (array_game[1, 1] == 2) & (array_game[2, 2] == 2) & (array_game[3, 3] == 2))
             {
-                GameEnd = true;
-                bt1_1.Background = Brushes.Blue;
-                bt2_2.Background = Brushes.Blue;
-                bt3_3.Background = Brushes.Blue;
-                bt4_4.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             //Przekatna Lewa Gora - Prawy Dol
             if ((array_game[1, 1] == 1) & (array_game[2, 2] == 1) & (array_game[3, 3] == 1) & (array_game[4, 4] == 1))
             {
-                GameEnd = true;
-                bt2_2.Background = Brushes.Red;
-                bt3_3.Background = Brushes.Red;
-                bt4_4.Background = Brushes.Red;
-                bt5_5.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
             if ((array_game[1, 1] == 2) & (array_game[2, 2] == 2) & (array_game[3, 3] == 2) & (array_game[4, 4] == 2))
             {
-                GameEnd = true;
-                bt2_2.Background = Brushes.Blue;
-                bt3_3.Background = Brushes.Blue;
-                bt4_4.Background = Brushes.Blue;
-                bt5_5.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
 
             //Przekatna 1,0 4,3
             if ((array_game[1, 0] == 1) & (array_game[2, 1] == 1) & (array_game[3, 2] == 1) & (array_game[4, 3] == 1))
             {
-                GameEnd = true;
-                bt2_1.Background = Brushes.Red;
-                bt3_2.Background = Brushes.Red;
-                bt4_3.Background = Brushes.Red;
-                bt5_4.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[1, 0] == 2) & (array_game[2, 1] == 2) & (array_game[3, 2] == 2) & (array_game[4, 3] == 2))
             {
-                GameEnd = true;
-                bt2_1.Background = Brushes.Blue;
-                bt3_2.Background = Brushes.Blue;
-                bt4_3.Background = Brushes.Blue;
-                bt5_4.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             //Przekatna 0,1 3,4
             if ((array_game[0, 1] == 1) & (array_game[1, 2] == 1) & (array_game[2, 3] == 1) & (array_game[3, 4] == 1))
             {
-                GameEnd = true;
-                bt1_2.Background = Brushes.Red;
-                bt2_3.Background = Brushes.Red;
-                bt3_4.Background = Brushes.Red;
-                bt4_5.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
             if ((array_game[0, 1] == 2) & (array_game[1, 2] == 2) & (array_game[2, 3] == 2) & (array_game[3, 4] == 2))
             {
-                GameEnd = true;
-                bt1_2.Background = Brushes.Blue;
-                bt2_3.Background = Brushes.Blue;
-                bt3_4.Background = Brushes.Blue;
-                bt4_5.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
 
 
             //Przekatna Prawa Gora - Lewy Dol
             if ((array_game[0, 4] == 1) & (array_game[1, 3] == 1) & (array_game[2, 2] == 1) & (array_game[3, 1] == 1))
             {
-                GameEnd = true;
-                bt1_5.Background = Brushes.Red;
-                bt2_4.Background = Brushes.Red;
-                bt3_3.Background = Brushes.Red;
-                bt4_2.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[0, 4] == 2) & (array_game[1, 3] == 2) & (array_game[2, 2] == 2) & (array_game[3, 1] == 2))
             {
-                GameEnd = true;
-                bt1_5.Background = Brushes.Blue;
-                bt2_4.Background = Brushes.Blue;
-                bt3_3.Background = Brushes.Blue;
-                bt4_2.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             //Przekatna Prawa Gora - Lewy Dol
             if ((array_game[1, 3] == 1) & (array_game[2, 2] == 1) & (array_game[3, 1] == 1) & (array_game[4, 0] == 1))
             {
-                GameEnd = true;
-                bt2_4.Background = Brushes.Red;
-                bt3_3.Background = Brushes.Red;
-                bt4_2.Background = Brushes.Red;
-                bt5_1.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
             if ((array_game[1, 3] == 2) & (array_game[2, 2] == 2) & (array_game[3, 1] == 2) & (array_game[4, 0] == 2))
             {
-                GameEnd = true;
-                bt2_4.Background = Brushes.Blue;
-                bt3_3.Background = Brushes.Blue;
-                bt4_2.Background = Brushes.Blue;
-                bt5_1.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
 
             //Przekatna 0,3 3,0
             if ((array_game[0, 3] == 1) & (array_game[1, 2] == 1) & (array_game[2, 1] == 1) & (array_game[3, 0] == 1))
             {
-                GameEnd = true;
-                bt1_4.Background = Brushes.Red;
-                bt2_3.Background = Brushes.Red;
-                bt3_2.Background = Brushes.Red;
-                bt4_1.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
 
             if ((array_game[0, 3] == 2) & (array_game[1, 2] == 2) & (array_game[2, 1] == 2) & (array_game[3, 0] == 2))
             {
-                GameEnd = true;
-                bt1_4.Background = Brushes.Blue;
-                bt2_3.Background = Brushes.Blue;
-                bt3_2.Background = Brushes.Blue;
-                bt4_1.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
             //Przekatna 1,4 4,1
             if ((array_game[1, 4] == 1) & (array_game[2, 3] == 1) & (array_game[3, 2] == 1) & (array_game[4, 1] == 1))
             {
-                GameEnd = true;
-                bt2_5.Background = Brushes.Red;
-                bt3_4.Background = Brushes.Red;
-                bt4_3.Background = Brushes.Red;
-                bt5_2.Background = Brushes.Red;
+                player2count++;
+                Winner.Content = p2.Name;
+                koniecGry = true;
             }
             if ((array_game[1, 4] == 2) & (array_game[2, 3] == 2) & (array_game[3, 2] == 2) & (array_game[4, 1] == 2))
             {
-                GameEnd = true;
-                bt2_5.Background = Brushes.Blue;
-                bt3_4.Background = Brushes.Blue;
-                bt4_3.Background = Brushes.Blue;
-                bt5_2.Background = Brushes.Blue;
+                player1count++;
+                Winner.Content = p1.Name;
+                koniecGry = true;
             }
 
-
-
-
             #endregion
-
-
         }
 
         public void Start(object sender, RoutedEventArgs e)
         {
-
             dt.Interval = TimeSpan.FromSeconds(1);
             dt.Tick += dtTicker;
             dt.Start();
         }
 
-
-
-       
         private int increment = 0;
         private void dtTicker(object sender, EventArgs e)
         {
@@ -731,40 +614,6 @@ namespace TICTACTOE_5x5_game
         private void Stop(object sender, RoutedEventArgs e)
         {
             dt.Stop();
-            Trace.WriteLine(array_game[0, 0] + "ciekawe");
-            Trace.WriteLine(array_game[0, 1] + "ciekawe");
-            Trace.WriteLine(array_game[0, 2] + "ciekawe");
-            Trace.WriteLine(array_game[0, 3] + "ciekawe");
-            Trace.WriteLine(array_game[0, 4] + "ciekawe");
-            Trace.WriteLine(array_game[1, 0] + "ciekawe");
-            Trace.WriteLine(array_game[1, 1] + "ciekawe");
-            Trace.WriteLine(array_game[1, 2] + "ciekawe");
-            Trace.WriteLine(array_game[1, 3] + "ciekawe");
-            Trace.WriteLine(array_game[1, 4] + "ciekawe");
-            Trace.WriteLine(array_game[2, 0] + "ciekawe");
-            Trace.WriteLine(array_game[2, 1] + "ciekawe");
-            Trace.WriteLine(array_game[2, 2] + "ciekawe");
-            Trace.WriteLine(array_game[2, 3] + "ciekawe");
-            Trace.WriteLine(array_game[2, 4] + "ciekawe");
-            Trace.WriteLine(array_game[3, 0] + "ciekawe");
-            Trace.WriteLine(array_game[3, 1] + "ciekawe");
-            Trace.WriteLine(array_game[3, 2] + "ciekawe");
-            Trace.WriteLine(array_game[3, 3] + "ciekawe");
-            Trace.WriteLine(array_game[3, 4] + "ciekawe");
-            Trace.WriteLine(increment + " TYLE CZASU");
-
-
-            Trace.WriteLine(p1.Name +" gracz1  gracz1 " + p2.Name);
-
-
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            
-            GameEnd = true;
-            if(GameEnd == true)
-            Stop(sender, e);
         }
 
         public class Gracz
@@ -776,23 +625,25 @@ namespace TICTACTOE_5x5_game
                 Name = name;
                 Win = win;
             }
-            /*
-            public Zwyciestwo()
-            {
-                if (Win == true) {
-                    return $"{Name}";
-                }
-            }
-            */
 
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void Button_Click_1(object sender, RoutedEventArgs e)
         {
 
-           p1 = new Gracz(Player1Textbox.Text, false);
-            p2 = new Gracz(Player2Textbox.Text, false);
+           p1 = new Gracz(Player2Textbox.Text, false);
+           p2 = new Gracz(Player1Textbox.Text, false);
+            gracz1.Content = p1.Name;
+            gracz2.Content = p2.Name;
         }
-    }
+
+        private void licz()
+        {
+            licznikp2.Content = player1count;
+            licznikp1.Content = player2count;
+        }
+
+
+        }
 
 }
