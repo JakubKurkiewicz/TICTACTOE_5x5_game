@@ -67,6 +67,7 @@ namespace TICTACTOE_5x5_game
             Player1Textbox.MaxLength = 17;
             Player2Textbox.MaxLength = 17;
             i = 0;
+            Ruch.Content = "X";
             for (var c = 1; c < 6; c++)
             {
                 for (var d = 1; d < 6; d++)
@@ -142,6 +143,7 @@ namespace TICTACTOE_5x5_game
                     clickedButton.Tag = false;
                  
                     ruchGraczaA = false;
+                    Ruch.Content = "O";
                 }
             }
             else {
@@ -164,6 +166,7 @@ namespace TICTACTOE_5x5_game
                     clickedButton.Tag = true;
 
                     ruchGraczaA = true;
+                    Ruch.Content = "X";
                 }
                 
             }
