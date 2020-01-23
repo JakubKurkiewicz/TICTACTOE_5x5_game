@@ -18,7 +18,7 @@ using System.Windows.Threading;
 namespace TICTACTOE_5x5_game
 {
     /// <summary>
-    /// Logika interakcji dla klasy MainWindow.xaml
+    /// Logika interakcji dla klasy MainWindow.xaml by Jakub
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -55,7 +55,9 @@ namespace TICTACTOE_5x5_game
             NewGame();
         }
 
-
+        /// <summary>
+        /// Tworzenie nowej gry by Jakub 
+        /// </summary>
 
         private void NewGame()
         {
@@ -82,7 +84,9 @@ namespace TICTACTOE_5x5_game
                 }
             }
         }
-
+        /// <summary>
+        /// Przyciski do gry by Jakub
+        /// </summary>
         private void playground()
         {
             plansza = new Button[5, 5] {
@@ -172,20 +176,23 @@ namespace TICTACTOE_5x5_game
             }
 
             Sprawdz();
-
-            if (i == 25)
-            {
-                koniecGry = true;
-                Winner.Content = "REMIS";
-            }
+            
+            
             if (koniecGry == true)
             {
                 Winner_text.Content = "Wygrał: ";
                 Stop(sender, e);
                 NewGame();
             }
+            if (i == 25)
+            {
+                koniecGry = true;
+                Winner_text.Content = "REMIS";
+            }
         }
-
+        /// <summary>
+        /// Sprawdzenie czy ktos wygral by Karol 
+        /// </summary>
 
         private void Sprawdz()
         {
@@ -601,7 +608,9 @@ namespace TICTACTOE_5x5_game
 
             #endregion
         }
-
+        /// <summary>
+        /// Timer by Jakub
+        /// </summary>
         public void Start(object sender, RoutedEventArgs e)
         {
             dt.Interval = TimeSpan.FromSeconds(1);
@@ -635,8 +644,8 @@ namespace TICTACTOE_5x5_game
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
 
-           p1 = new Gracz(Player2Textbox.Text, false);
-           p2 = new Gracz(Player1Textbox.Text, false);
+            p1 = new Gracz(Player2Textbox.Text, false);
+            p2 = new Gracz(Player1Textbox.Text, false);
             gracz1.Content = p1.Name;
             gracz2.Content = p2.Name;
         }
@@ -646,8 +655,6 @@ namespace TICTACTOE_5x5_game
             licznikp2.Content = player1count;
             licznikp1.Content = player2count;
         }
-
-
         }
 
 }
