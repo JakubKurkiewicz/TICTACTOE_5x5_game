@@ -142,6 +142,8 @@ namespace TICTACTOE_5x5_game
                     clickedButton.Tag = false;
                  
                     ruchGraczaA = false;
+
+                    Ruch.Content = "O";
                 }
             }
             else {
@@ -164,22 +166,25 @@ namespace TICTACTOE_5x5_game
                     clickedButton.Tag = true;
 
                     ruchGraczaA = true;
+
+                    Ruch.Content = "X";
                 }
                 
             }
 
             Sprawdz();
 
-            if (i == 25)
-            {
-                koniecGry = true;
-                Winner.Content = "REMIS";
-            }
+            
             if (koniecGry == true)
             {
                 Winner_text.Content = "Wygrał: ";
                 Stop(sender, e);
                 NewGame();
+            }
+            if (i == 25)
+            {
+                koniecGry = true;
+                Winner_text.Content = "REMIS";
             }
         }
 

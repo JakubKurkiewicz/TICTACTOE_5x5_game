@@ -46,5 +46,7 @@
         <Label x:Name="gracz1" FontSize="20" Content="" HorizontalAlignment="Left" Margin="675,301,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.263,0.192" Width="180"/>
         <Label x:Name="gracz2"  FontSize="20" Content="" HorizontalAlignment="Left" Margin="480,301,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.263,0.192" Width="180"/>
         <Label Content="Wciśnij, aby zacząć grę --> " FontSize="13" HorizontalAlignment="Left" Margin="385,251,0,0" VerticalAlignment="Top" Width="165"/>
+        <Label Content="Ruch gracza: " FontSize="13" HorizontalAlignment="Left" Margin="87,37,0,0" VerticalAlignment="Top" Width="165"/>
+        <Label Content="X" x:Name="Ruch"  FontSize="13" HorizontalAlignment="Left" Margin="177,37,0,0" VerticalAlignment="Top" Width="30"/>
     </Grid>
 </Window>
